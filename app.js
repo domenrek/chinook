@@ -191,4 +191,10 @@ app.get('/pages', function(request, response) {
   });
 });
 
+app.get('/', function(request, response) {
+  response.redirect('/artists/1');
+});
 
+app.listen(process.env.PORT, function() {
+  console.log("streznik je pognan");
+});
