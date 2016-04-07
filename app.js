@@ -10,7 +10,7 @@ var itemsPerPage = 20;
 var artists = function(page, artist, details, callback) {
   db.all("SELECT Artist.ArtistId, Name, StarsNo " +
     "FROM Artist, Stars WHERE Artist.ArtistId = Stars.ArtistId " +
-    "ORDER BY Name LIMIT 20 OFFSET ($page - 1) * 20",
+    "ORDER BY Name LIMIT "+itemsPerPage+" OFFSET ($page - 1) * "+itemsPerPage,
     {$page: page}, function(error, rows) {
       if (error) {
         console.log(error);
@@ -94,8 +94,14 @@ var genres = function(artist, callback) {
         console.log(error);
         callback('<strong>Something went wrong!</strong>');
       } else {
-        var result = '<h5>Genres</h5><div id="genres">' + 
-          'No genres for this artist' + 
+        var result = '<h5>Genres</h5><div id="genres">';
+        if(rows.length ==0){
+          result ='No genres for this artist'; 
+        }else{
+          for(var i=0; i<rows.length;i++){
+            result += (i>0 ? ' | ' : ' ') + rows[i].Name;
+          }
+        }
           '</div>';
         callback(result);
       }
